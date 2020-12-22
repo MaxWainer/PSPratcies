@@ -32,7 +32,7 @@ if ( $args.Count -lt 2 -or $args.Count -gt 3 ) { # ТУТ ПРОСТО ЗАЩИТА ОТ ДУРАКОВ!
     }
 
     if ($date -notmatch $datePattern) {
-        if($date -notmatch $dateTimePattern) {
+        if($date -notmatch $dateTimePattern -and $args.Count -eq 3) {
             throw "Ошибка! Введённое значение: " + $date + " не явлется датой и/или дайтой с временем!"
         }
         throw "Ошибка! Введённое значение: " + $date + " не явлется датой и/или дайтой с временем!"
@@ -50,12 +50,9 @@ if ( $args.Count -lt 2 -or $args.Count -gt 3 ) { # ТУТ ПРОСТО ЗАЩИТА ОТ ДУРАКОВ!
         #($_.CreationTime -like ($date -replace '-', ':'))
         #}
         ForEach ($item in $list) {
-            if ($item.CreationTime -contains $date)
-            {
+            if ($item.CreationTime -match $datePattern) {
                 Write-Host "Passed!"
-            }
-            else
-            {
+            } else {
                 Write-Host "Incorrect!"
             }
             Write-Host ""$item.FullName "     " $item.LastAccessTimeUtc "      " $item.LastWriteTimeUtc "      " $item.CreationTime
