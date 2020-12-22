@@ -19,11 +19,11 @@ if ( $args.Count -ne 3 ) { # ТУТ ПРОСТО ЗАЩИТА ОТ ДУРАКО�
     #   ($_.LastWriteTime -gt $date) -and ($_.Length -ge 1kb) -and ($_.Length -le 10mb)
     #}
     Write-Host " "
-    Write-Host "Directory:"$path
+    Write-Host "Директория:"$path
     Write-Host " "
     Write-Host "-------------------------------------------------------------------"
     Write-Host " "
-    Write-Host " File name             Last Write Time             Last Access Time"
+    Write-Host " Название Файла    Время последнего редактирования     Время достпа"
     $list = Get-ChildItem $path -Recurse | Where-Object -FilterScript {
         ($_.LastAccessTime -gt $date)
     }
