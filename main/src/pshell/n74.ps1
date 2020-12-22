@@ -1,29 +1,32 @@
-# -ne - РѕР·РЅР°С‡Р°РµС‚ РµСЃР»Рё РєРѕР»-РІРѕ Р°СЂРіСѓРјРµРЅС‚РѕРІ РЅРµ СЂР°РІРЅРѕ 2
-# С‚Рѕ РјС‹ РґРµР»Р°РµРј РІСЃС‘ С‡С‚Рѕ РЅРёР¶Рµ РґРѕ else
-# РџРѕРґСЂРѕР±РЅРµРµ: https://docs.microsoft.com/ru-ru/powershell/scripting/learn/deep-dives/everything-about-if?view=powershell-7.1
-# $args.Count - С‡РёСЃР»Рѕ Р°СЂРіСѓРјРµРЅС‚РѕРІ
-if ( $args.Count -ne 3 ) { # РўРЈРў РџР РћРЎРўРћ Р—РђР©РРўРђ РћРў Р”РЈР РђРљРћР’!1!1!
-    Write-Host "РљРѕР»РёС‡РµСЃС‚РІРѕ Р°СЂРіСѓРјРµРЅС‚РѕРІ РІРІРµРґРµРЅРѕ РЅРµ РІРµСЂРЅРѕ!" # Р’С‹РІРѕРґ СЃРѕРѕР±С‰РµРЅРёР№
-    Write-Host "Р’С‹ РІРІРµР»Рё"$args.Count", Р° РЅСѓР¶РЅРѕ 2 РёР»Рё 3!"
-    throw "РћС€РёР±РєР°! РџСЂРѕРІРµСЂСЊС‚Рµ СЃРёРЅС‚Р°РєСЃРёСЃ РєРѕРјР°РЅРґС‹!" # Р’С‹С…РѕРґ РёР· СЃРєСЂРёРїС‚Р°, РґР»СЏ СѓРґРѕР±СЃС‚РІР° СЏ РїСЂРѕСЃС‚Рѕ РІС‹РґР°СЋ "РёСЃРєР»СЋС‡РµРЅРёРµ"
+# -ne - означает если кол-во аргументов не равно 2
+# то мы делаем всё что ниже до else
+# Подробнее: https://docs.microsoft.com/ru-ru/powershell/scripting/learn/deep-dives/everything-about-if?view=powershell-7.1
+# $args.Count - число аргументов
+if ( $args.Count -ne 2 ) { # ТУТ ПРОСТО ЗАЩИТА ОТ ДУРАКОВ!1!1!
+    Write-Host "Количество аргументов введено не верно!" # Вывод сообщений
+    Write-Host "Вы ввели"$args.Count", а нужно 2 или 3!"
+    throw "Ошибка! Проверьте синтаксис команды!"; # Выход из скрипта, для удобства я просто выдаю "исключение"
 } else {
-    # РџСЂРёСЃРІР°РёРІР°РµРј filePath Рє РїРµСЂРІРѕРјСѓ Р°СЂРіСѓРјРµРЅС‚Сѓ
+    # Присваиваем filePath к первому аргументу
     $path = $args[0]
-    # РџСЂРёСЃРІР°РёРІР°РµРј date Рє РІС‚РѕСЂРѕРјСѓ Р°СЂРіСѓРјРµРЅС‚Сѓ
+    # Присваиваем date к второму аргументу
     if ( $args.Count -eq 2 ) {
         $date = $args[1]
-    } else {
+    } elseif ( $args.Count -eq 3 ) {
         $date = $args[1] + " " + $args[2]
+    }
+    else {
+        $date = $args[1]
     }
     #Get-ChildItem -Path $path -Recurse -Include *.exe | where -FilterScript {
     #   ($_.LastWriteTime -gt $date) -and ($_.Length -ge 1kb) -and ($_.Length -le 10mb)
     #}
     Write-Host " "
-    Write-Host "Р”РёСЂРµРєС‚РѕСЂРёСЏ:"$path
+    Write-Host "Директория:"$path
     Write-Host " "
-    Write-Host "-------------------------------------------------------------------"
+    Write-Host "--------------------------------------------------------------------"
     Write-Host " "
-    Write-Host " РќР°Р·РІР°РЅРёРµ Р¤Р°Р№Р»Р°    Р’СЂРµРјСЏ РїРѕСЃР»РµРґРЅРµРіРѕ СЂРµРґР°РєС‚РёСЂРѕРІР°РЅРёСЏ     Р’СЂРµРјСЏ РґРѕСЃС‚РїР°"
+    Write-Host ""
     $list = Get-ChildItem $path -Recurse | Where-Object -FilterScript {
         ($_.LastAccessTime -gt $date)
     }
@@ -32,6 +35,5 @@ if ( $args.Count -ne 3 ) { # РўРЈРў РџР РћРЎРўРћ Р—РђР©РРўРђ РћРў Р”РЈР РђРљРћР
         Write-Host ""$item.FullName "     " $item.LastWriteTime "      " $item.LastAccessTime
     }
     Write-Host " "
-    Write-Host "-------------------------------------------------------------------"
-    Write-Host "Current time:"System.DateTime.ToString
+    Write-Host "--------------------------------------------------------------------"
 }
