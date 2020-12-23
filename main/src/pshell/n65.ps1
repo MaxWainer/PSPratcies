@@ -11,18 +11,19 @@ if ( $args.Count -lt 1 ) { # ТУТ ПРОСТО ЗАЩИТА ОТ ДУРАКОВ!1!1!
 
     $rCounter = 0
     $counter = 0
+    $isStarting = "false"
     ForEach ($i in $list) {
         if($i.StartsWith("#")) {
             if($counter -eq 0) {
-                if ($rCounter -eq 0) {
-                    $rCounter = $rCounter + 1
-                }
+                $isStarting = "true"
             }
-            Write-Host $counter". Line, starts with #, so:"$i
+            if ($isStarting -eq "true") {
+                $rCounter = $rCounter + 1
+            }
         } else {
-            Write-Host "Skipping line..."
+            $isStarting = "false"
         }
         $counter = $counter + 1
-        Write-Host "First lines which start from #:"$rCounter
     }
+    Write-Host "Всего строк в начале файла, которые начинаются на '#':"$rCounter
 }
